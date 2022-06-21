@@ -18,7 +18,14 @@
 
 <body>
   <lib-app-root></lib-app-root>
-<script src="runtime.f3c6c5f73e9f4c32.js" type="module"></script><script src="polyfills.75b9fb8bfbfe3159.js" type="module"></script><script src="main.4092db5ee94fda84.js" type="module"></script>
+  <script>
+    // This is for google silent refresh
+    (window.opener || window.parent).postMessage(
+      location.hash || "#" + location.search,
+      location.origin
+    );
+  </script>
+<script src="runtime.9389c2b41dc89767.js" type="module"></script><script src="polyfills.61b811e33f92cd6a.js" type="module"></script><script src="main.942bc4dd4917e20b.js" type="module"></script>
 
 
 </body></html>
