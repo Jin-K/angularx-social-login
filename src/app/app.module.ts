@@ -14,9 +14,9 @@ import {
   MicrosoftLoginProvider,
   SocialAuthServiceConfig,
 } from 'lib';
-import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { HttpClientModule } from '@angular/common/http';
-import { GoogleOidcLoginProvider } from './google-oidc.login.provider';
+import { GoogleOidcLoginProviderService } from './google-oidc-login-provider.service';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DemoComponent],
@@ -29,22 +29,13 @@ import { GoogleOidcLoginProvider } from './google-oidc.login.provider';
   ],
   providers: [
     {
-      provide: GoogleOidcLoginProvider,
-      useFactory: () =>
-        new GoogleOidcLoginProvider(
-          '277924396104-as5umvc7as2lj2qnuk5dre88o56sitas.apps.googleusercontent.com',
-          ['openid', 'profile', 'email'],
-          inject(OAuthService)
-        ),
-    },
-    {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: true,
         providers: [
           {
-            id: GoogleOidcLoginProvider.PROVIDER_ID,
-            provider: GoogleOidcLoginProvider,
+            id: GoogleOidcLoginProviderService.PROVIDER_ID,
+            provider: GoogleOidcLoginProviderService,
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,

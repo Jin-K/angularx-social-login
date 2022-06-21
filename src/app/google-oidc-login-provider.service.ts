@@ -1,15 +1,16 @@
+import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { BaseLoginProvider, SocialUser } from 'lib';
 import { first, firstValueFrom } from 'rxjs';
 
-export class GoogleOidcLoginProvider extends BaseLoginProvider {
+@Injectable({ providedIn: 'root' })
+export class GoogleOidcLoginProviderService extends BaseLoginProvider {
   public static readonly PROVIDER_ID = 'GOOGLE_OIDC' as const;
+  private readonly _clientId =
+    '277924396104-as5umvc7as2lj2qnuk5dre88o56sitas.apps.googleusercontent.com' as const;
+  private readonly _scopes: string | string[] = ['openid', 'profile', 'email'];
 
-  constructor(
-    private readonly _clientId: string,
-    private readonly _scopes: string | string[],
-    private readonly _oAuthService: OAuthService
-  ) {
+  constructor(private readonly _oAuthService: OAuthService) {
     super();
   }
 
@@ -23,7 +24,7 @@ export class GoogleOidcLoginProvider extends BaseLoginProvider {
       issuer: 'https://accounts.google.com',
       strictDiscoveryDocumentValidation: false,
       redirectUri: ourUrl,
-      silentRefreshRedirectUri: ourUrl + '/silent-refresh.html',
+      silentRefreshRedirectUri: ourUrl,
       useSilentRefresh: true,
       clientId: this._clientId,
       scope:
@@ -42,7 +43,7 @@ export class GoogleOidcLoginProvider extends BaseLoginProvider {
     if (this._oAuthService.hasValidIdToken()) {
       return this.createUser(this._oAuthService.getIdToken());
     } else {
-      throw `No user is currently logged in with ${GoogleOidcLoginProvider.PROVIDER_ID}`;
+      throw `No user is currently logged in with ${GoogleOidcLoginProviderService.PROVIDER_ID}`;
     }
   }
 

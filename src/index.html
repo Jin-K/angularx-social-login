@@ -30,6 +30,13 @@
 
 <body>
   <lib-app-root></lib-app-root>
+  <script>
+    // This is for google silent refresh
+    (window.opener || window.parent).postMessage(
+      location.hash || "#" + location.search,
+      location.origin
+    );
+  </script>
 </body>
 
 </html>
