@@ -6,7 +6,12 @@
       <p class="card-text">Sign in with</p>
     </div>
     <div class="card-block d-flex justify-content-center">
-      <asl-google-signin-button class="mx-1"></asl-google-signin-button>
+      <button
+        class="btn btn-social-icon btn-google mx-1"
+        (click)="signInWithGoogle()"
+      >
+        <span class="fab fa-google"></span>
+      </button>
       <button
         class="btn btn-social-icon btn-facebook mx-1"
         (click)="signInWithFB()"
@@ -51,9 +56,14 @@
     </div>
     <div
       class="card-block"
-      *ngIf="user.provider === GoogleLoginProvider.PROVIDER_ID"
+      *ngIf="
+        [
+          GoogleLoginProvider.PROVIDER_ID,
+          GoogleOidcLoginProvider.PROVIDER_ID
+        ].includes(user.provider)
+      "
     >
-      <button class="btn" (click)="refreshGoogleToken()">
+      <button class="btn" (click)="refreshGoogleToken(user.provider)">
         Refresh google token
       </button>
     </div>

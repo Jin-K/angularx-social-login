@@ -8,6 +8,7 @@ import {
   VKLoginProvider,
   MicrosoftLoginProvider,
 } from 'lib';
+import { GoogleOidcLoginProvider } from '../google-oidc.login.provider';
 
 @Component({
   selector: 'lib-app-demo',
@@ -17,6 +18,7 @@ import {
 export class DemoComponent implements OnInit {
   user: SocialUser | undefined;
   GoogleLoginProvider = GoogleLoginProvider;
+  GoogleOidcLoginProvider = GoogleOidcLoginProvider;
 
   constructor(private readonly _authService: SocialAuthService) {}
 
@@ -24,6 +26,10 @@ export class DemoComponent implements OnInit {
     this._authService.authState.subscribe((user) => {
       this.user = user;
     });
+  }
+
+  signInWithGoogle(): void {
+    this._authService.signIn(GoogleOidcLoginProvider.PROVIDER_ID);
   }
 
   signInWithFB(): void {
@@ -46,7 +52,7 @@ export class DemoComponent implements OnInit {
     this._authService.signOut();
   }
 
-  refreshGoogleToken(): void {
-    this._authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  refreshGoogleToken(providerId: string): void {
+    this._authService.refreshAuthToken(providerId);
   }
 }

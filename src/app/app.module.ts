@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -7,7 +7,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DemoComponent } from './demo/demo.component';
 
 import {
-  GoogleLoginProvider,
   SocialLoginModule,
   FacebookLoginProvider,
   AmazonLoginProvider,
@@ -15,21 +14,37 @@ import {
   MicrosoftLoginProvider,
   SocialAuthServiceConfig,
 } from 'lib';
+import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
+import { HttpClientModule } from '@angular/common/http';
+import { GoogleOidcLoginProvider } from './google-oidc.login.provider';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DemoComponent],
-  imports: [BrowserModule, FormsModule, SocialLoginModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    OAuthModule.forRoot(),
+    SocialLoginModule,
+  ],
   providers: [
+    {
+      provide: GoogleOidcLoginProvider,
+      useFactory: () =>
+        new GoogleOidcLoginProvider(
+          '277924396104-as5umvc7as2lj2qnuk5dre88o56sitas.apps.googleusercontent.com',
+          ['openid', 'profile', 'email'],
+          inject(OAuthService)
+        ),
+    },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
         autoLogin: true,
         providers: [
           {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '624796833023-clhjgupm0pu6vgga7k5i5bsfp6qp6egh.apps.googleusercontent.com'
-            ),
+            id: GoogleOidcLoginProvider.PROVIDER_ID,
+            provider: GoogleOidcLoginProvider,
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
